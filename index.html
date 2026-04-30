@@ -1,0 +1,547 @@
+[2026/5/1 5:15] i: <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NG 集团 · 导航中心</title>
+<style>@import url('https://fonts.loli.net/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap');</style>
+<style>
+  :root {
+    --bg: #050810;
+    --bg2: #0a0f1e;
+    --panel: #0d1528;
+    --border: rgba(0,200,255,0.15);
+    --accent: #00c8ff;
+    --accent2: #7b2fff;
+    --gold: #f0b429;
+    --text: #c8d8f0;
+    --muted: #5a7090;
+    --glow: 0 0 20px rgba(0,200,255,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans SC', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Radial glow top */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(123,47,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 48px 20px 32px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(10,15,30,0.9) 0%, transparent 100%);
+  }
+
+  .logo-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .logo-hex {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: 18px;
+    color: #fff;
+    box-shadow: 0 0 30px rgba(0,200,255,0.5);
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 20px rgba(0,200,255,0.4); }
+    50%      { box-shadow: 0 0 50px rgba(0,200,255,0.8), 0 0 80px rgba(123,47,255,0.4); }
+  }
+
+  .site-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 2rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, var(--accent), #fff, var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 4px;
+  }
+
+  .tagline {
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* Notice bar */
+  .notice {
+    margin: 0 auto;
+    max-width: 760px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: rgba(240,180,41,0.08);
+    border: 1px solid rgba(240,180,41,0.25);
+    border-radius: 6px;
+    font-size: 0.82rem;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .notice span.icon { font-size: 1rem; animation: flicker 2s infinite; }
+  @keyframes flicker { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+  /* ── TABS ── */
+  nav.tabs {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 28px 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    padding: 9px 24px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-family: 'Noto Sans SC', sans-serif;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tab-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+[2026/5/1 5:15] i: transition: opacity 0.25s;
+  }
+
+  .tab-btn span { position: relative; z-index: 1; }
+
+  .tab-btn.active, .tab-btn:hover {
+    color: #fff;
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(0,200,255,0.2);
+  }
+
+  .tab-btn.active::before, .tab-btn:hover::before { opacity: 0.12; }
+
+  /* ── GRID ── */
+  main {
+    position: relative;
+    z-index: 10;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover {
+    border-color: rgba(0,200,255,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0,200,255,0.15), 0 0 0 1px rgba(0,200,255,0.1);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+    background: var(--bg2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    transition: border-color 0.3s;
+  }
+
+  .card:hover .card-icon { border-color: var(--accent); }
+
+  .card-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #e0eeff;
+  }
+
+  .card-stars {
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+  }
+
+  .card-desc {
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .card-badge {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba(0,200,255,0.1);
+    border: 1px solid rgba(0,200,255,0.2);
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  .card-badge.hot {
+    background: rgba(255,60,60,0.1);
+    border-color: rgba(255,60,60,0.3);
+    color: #ff6060;
+  }
+
+  /* ── HERO CARD ── */
+  .hero-card {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    text-align: left;
+    gap: 20px;
+    padding: 24px;
+    background: linear-gradient(135deg, rgba(123,47,255,0.15), rgba(0,200,255,0.08));
+    border-color: rgba(0,200,255,0.25);
+    margin-bottom: 4px;
+  }
+
+  .hero-card .card-icon { width: 72px; height: 72px; font-size: 2.2rem; flex-shrink: 0; }
+
+  .hero-card .info { flex: 1; }
+
+  .hero-card .card-title { font-size: 1.1rem; margin-bottom: 4px; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+  }
+
+  footer span { color: var(--accent); }
+
+  /* Scan line effect */
+  @keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+
+  .scanline {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0,200,255,0.3), transparent);
+    animation: scanline 8s linear infinite;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  @media (max-width: 600px) {
+    .site-title { font-size: 1.4rem; }
+    .
+[2026/5/1 5:15] i: grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-card { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+
+<header>
+  <div class="logo-wrap">
+    <div class="logo-hex">NG</div>
+    <div>
+      <div class="site-title">NG 集团</div>
+      <div class="tagline">品质铸就品牌 · 导航中心</div>
+    </div>
+  </div>
+  <div class="notice">
+    <span class="icon">🔥</span>
+    兼职项目 · 操作简单 · 结算稳定 · 长期可做，统一规则，不收任何费用！
+  </div>
+  <div class="notice" style="margin-top:10px; color:#00c8ff; border-color:rgba(0,200,255,0.25); background:rgba(0,200,255,0.06);">
+    <span class="icon">📞</span>
+    旺旺：<strong>166225576</strong> &nbsp;|&nbsp; ✈️ Telegram：<strong>chijibaa</strong>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" onclick="switchTab(this,'rec')"><span>推荐平台</span></button>
+  <button class="tab-btn" onclick="switchTab(this,'game')"><span>热门游戏</span></button>
+  <button class="tab-btn" onclick="switchTab(this,'tool')"><span>工具 / 商务</span></button>
+</nav>
+
+<main>
+  <!-- 推荐平台 -->
+  <section class="section active" id="rec">
+    <div class="section-label">// 推荐平台</div>
+    <div class="grid">
+
+      <a class="card" href="https://q57qf.top" target="_blank">
+        <div class="card-icon">⭕</div>
+        <div class="card-title">28圈</div>
+        <div class="card-stars">★★★★★</div>
+        <div class="card-desc">稳定运营，信誉保障</div>
+        <div class="card-badge hot">推荐</div>
+      </a>
+
+      <a class="card" href="https://149.30.163.235:32011/#/link?allwin=JelZFpzXt%2BwXiIdBRQbkAg%3D%3D" target="_blank">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">NG28</div>
+        <div class="card-stars">★★★★★</div>
+        <div class="card-desc">专属通道，立即体验</div>
+        <div class="card-badge hot">推荐</div>
+      </a>
+
+      <a class="card" href="https://ncgca.tprsmi.com/app/register.php?site_id=1062&topId=1776368&selfPlanId=1679525" target="_blank">
+        <div class="card-icon">💰</div>
+        <div class="card-title">汇赢国际</div>
+        <div class="card-stars">★★★★★</div>
+        <div class="card-desc">汇聚精英，赢在国际</div>
+        <div class="card-badge">优选</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- 热门游戏 -->
+  <section class="section" id="game">
+    <div class="section-label">// 热门游戏</div>
+    <div class="grid">
+
+      <a class="card" href="#">
+        <div class="card-icon">🎮</div>
+        <div class="card-title">竞技游戏</div>
+        <div class="card-stars">★★★★★</div>
+        <div class="card-desc">实时对战，刺激体验</div>
+        <div class="card-badge hot">热门</div>
+      </a>
+
+      <a class="card" href="#">
+        <div class="card-icon">🃏</div>
+        <div class="card-title">棋牌游戏</div>
+        <div class="card-stars">★★★★☆</div>
+        <div class="card-desc">经典棋牌，多人同乐</div>
+        <div class="card-badge">经典</div>
+      </a>
+
+      <a class="card" href="#">
+        <div class="card-icon">🎲</div>
+        <div class="card-title">休闲游戏</div>
+        <div class="card-stars">★★★★☆</div>
+        <div class="card-desc">轻松休闲，随时畅玩</div>
+        <div class="card-badge">休闲</div>
+      </a>
+
+      <a class="card" href="#">
+        <div class="card-icon">🏟️</div>
+        <div class="card-title">体育竞猜</div>
+        <div class="card-stars">★★★★★</div>
+        <div class="card-desc">赛事直播，实时竞猜</div>
+        <div class="card-badge hot">热门</div>
+      </a>
+
+      <a class="card" href="#">
+        <div class="card-icon">🎰</div>
+        <div class="card-title">电子娱乐</div>
+        <div class="card-stars">★★★★☆</div>
+        <div class="card-desc">精品电子，高倍回报</div>
+        <div class="card-badge">推荐</div>
+      </a>
+
+      <a class="card" href="#">
+        <div class="card-icon">🎭</div>
+        <div class="card-title">真人娱乐</div>
+        <div class="card-stars">★★★★★</div>
+        <div class="card-desc">专业荷官，沉浸体验</div>
+        <div class="card-badge">VIP</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- 工具/商务 -->
+  <section class="section" id="tool">
+    <div class="section-label">// 工具 / 商务</div>
+    <div class="grid">
+
+      <a class="card" href="https://wwwqx.mechatmall.
+[2026/5/1 5:15] i: com" target="_blank">
+        <div class="card-icon">📲</div>
+        <div class="card-title">旺旺下载</div>
+        <div class="card-stars">★★★★★</div>
+        <div class="card-desc">官方通讯工具，安全便捷</div>
+        <div class="card-badge">官方</div>
+      </a>
+
+      <a class="card" href="#">
+        <div class="card-icon">📊</div>
+        <div class="card-title">数据统计</div>
+        <div class="card-stars">★★★★☆</div>
+        <div class="card-desc">实时数据，精准分析</div>
+        <div class="card-badge">工具</div>
+      </a>
+
+      <a class="card" href="#">
+        <div class="card-icon">💬</div>
+        <div class="card-title">在线客服</div>
+        <div class="card-stars">★★★★★</div>
+        <div class="card-desc">7×24小时，专业支持</div>
+        <div class="card-badge">支持</div>
+      </a>
+
+      <a class="card" href="#">
+        <div class="card-icon">🔐</div>
+        <div class="card-title">安全中心</div>
+        <div class="card-stars">★★★★★</div>
+        <div class="card-desc">账号保护，多重验证</div>
+        <div class="card-badge">安全</div>
+      </a>
+
+      <a class="card" href="#">
+        <div class="card-icon">💰</div>
+        <div class="card-title">财务中心</div>
+        <div class="card-stars">★★★★☆</div>
+        <div class="card-desc">快速出入款，实时到账</div>
+        <div class="card-badge">金融</div>
+      </a>
+
+      <a class="card" href="#">
+        <div class="card-icon">📣</div>
+        <div class="card-title">推广合作</div>
+        <div class="card-stars">★★★★★</div>
+        <div class="card-desc">高佣金，全程支持</div>
+        <div class="card-badge hot">热招</div>
+      </a>
+
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>NG 集团</span> · 品质铸就品牌 · 精选平台推荐与资讯服务，信息仅供参考 · © 2025
+</footer>
+
+<script>
+  function switchTab(btn, sectionId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(sectionId).classList.add('active');
+  }
+</script>
+</body>
+</html>
